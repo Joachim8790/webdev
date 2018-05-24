@@ -1,0 +1,96 @@
+﻿@model VBTicketVerkoop.ViewModels.ShopViewModel
+
+@{
+    ViewBag.Title = "Shop";
+}
+@using (Html.BeginForm())
+{
+<div class="col-sm-4 move-forward">
+   
+    <div class="form-group" style="width:max-content;margin-top:20px;">
+        <label for="ddlPloegen">TICKETS</label>
+        @Html.DropDownListFor(m => m.geselecteerdePloeg,Model.ploegen,new { @id= "ddlPloegen" })
+    </div>
+ 
+</div>
+<div class="col-sm-12" id="tablecol">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Thuisploeg</th>
+                <th scope="col">Uitploeg</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Stadion</th>
+            </tr>
+        </thead>
+        <tbody class="move-forward" id="myTable">
+            
+        </tbody>
+    </table>
+
+</div>
+<br />
+<h4>JAAR ABONNEMENTEN</h4>
+<div class="col-sm-12" id="tablecol">
+   
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Plaats</th>
+                    <th scope="col">Prijs</th>
+                    <th scope="col">Aantal</th>
+                </tr>
+            </thead>
+
+            <tbody class="move-forward" id="aboTable">
+
+            </tbody>
+        </table>
+        <button type="submit" style="visibility:hidden;" class="btn btn-success" id="btnSubmit">Toevoegen aan winkelmandje</button>
+
+        <div class="alert alert-danger" id="validation" role="alert">
+
+        </div>
+
+</div>
+}
+<script type="text/javascript">
+    var ddlPloegen = $("#ddlPloegen");
+    ddlPloegen.change(function () {
+        var value = this.value;
+        console.log("value:"+value);
+        $.ajax({
+            url: '@Url.Action("ListTickets","Home")',
+            dataType: "json",
+            type: "POST",
+            cache: false,
+            data: {selectedIndex: value },
+            success: function (data) {
+                if (data.success) {
+                    var tableBody = $("#myTable");
+                    $("#btnSubmit").attr("style", "visibility:visible;");
+                    var index;
+                    var htmlstring = "";
+                    for (index = 0; index < data.thuisploegen.length; index++)
+                    {
+                        htmlstring += "<tr><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.thuisploegen[index] + "</a></td><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.uitploegen[index] + "</a></td><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.datums[index] + "</a></td><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.stadions[index] + "</a></td></tr>";
+                    }
+                   
+                    var aboTable = $("#aboTable");
+                    var string = "";
+                    for (var i = 0; i < "@Model.plaatsen.Count()"; i++)
+                    {
+                        string += "<tr><td>" + data.plaatsen[i] + "</td><td>€" + data.abonnementPrijzen[i] + ",00</td><td><input type='number' placeholder='Aantal' ID='numberOfAbos[" + i + "]' Name='numberOfAbos[" + i + "]' class='form-control'/></td></tr>"
+                    }
+                    tableBody.html(htmlstring);
+                    aboTable.html(string);
+                }
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+
+    });
+
+</script>

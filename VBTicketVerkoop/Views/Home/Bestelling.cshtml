@@ -1,0 +1,52 @@
+﻿@model VBTicketVerkoop.ViewModels.BestellingDetailViewModel
+
+@{
+    ViewBag.Title = "Bestelling";
+}
+
+<h2>Bestelling @Model.Bestelling.BestellingID op @Model.Bestelling.date.ToShortDateString()</h2>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Wedstrijd</th>
+            <th scope="col">Plaats</th>
+            <th scope="col">Stadion</th>
+            <th scope="col">Prijs</th>
+
+
+        </tr>
+    </thead>
+    <tbody id="myTable">
+      
+
+
+
+        @for (int i = 0; i < Model.thuisPloegen.Count(); i++)
+        {
+            <tr>
+                <td>Ticket</td>
+                <td>@Model.thuisPloegen.ElementAt(i).naam - @Model.uitploegen.ElementAt(i).naam</td>
+                <td>@Model.Plaatsen.ElementAt(i).plaatsNaam</td>
+                <td>@Model.Stadions.ElementAt(i).naam</td>
+                <td>@String.Format("€{0},00", Model.Prijzen.ElementAt(i).prijs)</td>            
+            </tr>
+
+        }
+        @for (int i = 0; i < Model.Abonnementen.Count(); i++)
+        {
+
+            <tr>
+                <td>Abonnement</td>
+                <td>@Model.AbonnementPloeg.ElementAt(i).naam</td>
+                <td>@Model.AbonnementPlaatsen.ElementAt(i).plaatsNaam</td>
+                <td>@Model.AbonnementStadions.ElementAt(i).naam</td>
+                <td>@String.Format("€{0},00", Model.Abonnementen.ElementAt(i).prijs)</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+        

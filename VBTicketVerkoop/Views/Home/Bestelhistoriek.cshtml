@@ -1,0 +1,36 @@
+﻿@model VBTicketVerkoop.ViewModels.BestelHistoriekViewModel
+
+@{
+    ViewBag.Title = "Bestelhistoriek";
+}
+
+<h2>Bestelhistoriek</h2>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">BestellingID</th>
+            <th scope="col">Bestel Datum</th>
+            <th scope="col">Totaal bedrag</th>
+            <th scope="col"></th>
+            
+
+        </tr>
+    </thead>
+    <tbody id="myTable">
+        @for (int i = 0; i < Model.Bestellingen.Count(); i++)
+        {
+           <tr>
+               <td>@Model.Bestellingen.ElementAt(i).BestellingID</td>
+               <td>@Model.Bestellingen.ElementAt(i).date.ToShortDateString()</td>
+               <td>@String.Format("€{0},00",Model.TotaalBedragen.ElementAt(i))</td>
+               <td><a href="Bestelling/@Model.Bestellingen.ElementAt(i).BestellingID"><span class="glyphicon glyphicon-list" aria-hidden="true"></span></a></td>
+
+           </tr>
+
+        }
+    </tbody>
+</table>
+
+
+

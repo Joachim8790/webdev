@@ -1,0 +1,112 @@
+﻿@model  VBTicketVerkoop.ViewModels.WinkelmandViewModel
+@{
+    ViewBag.Title = "Winkelmandje";
+}
+
+<h2>Mijn winkelmandje</h2>
+<div class="col-sm-12" id="tablecol">
+    @using (Html.BeginForm("Winkelmandje","Home",FormMethod.Post))
+    {
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Type</th>
+                    <th scope="col">Wedstrijd</th>
+                    <th scope="col">Plaats</th>
+                    <th scope="col">Stadion</th>
+                    <th scope="col">Prijs</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                <div id="hiddens">
+                    @for (int i = 0; i < Model.winkelmandlineIDS.Count(); i++)
+                    {
+                        <input id="winkelmandlineIDS" name="winkelmandlineIDS" hidden value="@Model.winkelmandlineIDS[i]" />
+                    }
+
+                </div>
+                
+                    
+                
+
+                @for (int i = 0; i < Model.plaats.Count(); i++)
+                {
+                    <tr id="@Model.winkelmandlijnen.ElementAt(i).ID.ToString()">
+                        <td>Ticket</td>
+                        <td>@Model.thuis.ElementAt(i).naam - @Model.uit.ElementAt(i).naam</td>
+                        <td>@Model.plaats.ElementAt(i).plaatsNaam</td>
+                        <td>@Model.stadion.ElementAt(i).naam</td>
+                        <td>@String.Format("€{0},00",Model.prijs.ElementAt(i).prijs)</td>
+                        <td><a onclick="@String.Format("deleteRow({0})",Model.winkelmandlijnen.ElementAt(i).ID.ToString())"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+ 
+                    </tr>
+                   
+                }
+                @for (int i = 0; i < Model.abonnementPlaats.Count(); i++)
+                {
+
+                    <tr id="@Model.winkelmandlijnen.ElementAt(i+Model.plaats.Count()).ID.ToString()">
+                        <td>Abonnement</td>
+                        <td>@Model.abonnementPloeg.ElementAt(i).naam</td>
+                        <td>@Model.abonnementPlaats.ElementAt(i).plaatsNaam</td>
+                        <td>@Model.abonnementStadion.ElementAt(i).naam</td>
+                        <td>@String.Format("€{0},00", Model.abonnementPrijs.ElementAt(i))</td>
+                        <td><a onclick="@String.Format("deleteRow({0})",Model.winkelmandlijnen.ElementAt(i+Model.plaats.Count()).ID.ToString())"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+         
+            double subtotal = Model.prijs.Sum(x => x.prijs) + Model.abonnementPrijs.Sum();
+        
+
+        <label class="subtotal">@String.Format("€{0},00",subtotal)</label>
+        <button type="submit" class="btn btn-success" id="btnSubmit">Order plaatsen</button>
+    }
+</div>
+
+<script type="text/javascript">
+    function deleteRow(i)
+    {
+        console.log(i);
+        $.ajax({
+            url: '@Url.Action("deleteRow", "Home")',
+            dataType: "json",
+            type: "Post",
+            cache: false,
+            data: {i:i},
+            success: function (data) {
+                if (data.success)
+                {
+                    var rawString = $("#" + i + " td:nth-of-type(5)").html();
+                    var price = rawString.substring(1, rawString.length - 3);
+                    var total = $(".subtotal").html().substring(1, $(".subtotal").html().length - 3);;
+                    total = total - price;
+                    $(".subtotal").html("€" + total + ",00")
+                    $("#" + i).remove();
+                    var inputs = $("#hiddens input");
+                    var j = 0;
+                    for(j = 0;j<inputs.length;j++)
+                    {
+                        if ($(inputs[j]).attr("value") == i)
+                        {
+                            inputs[j].remove();
+                        }
+
+                    }
+
+                }
+                else
+                {
+                   
+                  
+                }
+            },
+
+        });
+    }
+
+</script>

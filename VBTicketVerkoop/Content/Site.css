@@ -1,0 +1,55 @@
+﻿.nav.nav-bar {
+    border-radius:0px !important;
+}
+.body-content{
+    margin-top: 51px;
+    padding: 10px;
+}
+#ddlPloegen{
+     width: 300px;
+    height: 50px;
+    padding: 10px;
+    border: 1px solid #efefef;
+    margin-left:20px;
+}
+.thead-dark{
+    background: #333333 !important;
+    color: #ffffff !important;  
+}
+.thead-dark th{
+    text-align:center;
+}
+#tablecol{
+        margin-top: 50px;
+}
+.move-back{
+                z-index: -1;
+}
+.move-forward{
+    z-index:1010;
+}
+#myTable{
+    text-align:center;
+}
+#myTable tr:hover {
+    background-color:#efefef;
+    
+}
+#myTable tr td a{
+    color:#000 !important;
+    display:block;
+    
+}
+#myTable tr td a:hover{
+    text-decoration:none;
+    
+}
+.alert{
+    visibility:hidden;
+    margin-top:15px;
+}
+.subtotal{
+    float: right;
+    font-size: 3rem;
+    margin-right: 10px;
+}
