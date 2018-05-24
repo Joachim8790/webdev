@@ -32,18 +32,31 @@ namespace VBTicketVerkoop.Controllers
 
 
         }
-
-        public ActionResult About()
+        public ActionResult Ploegen()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            SelectListItem placeholder = new SelectListItem();
+            placeholder.Text = "Selecteer een ploeg";
+            placeholder.Value = "-1";
+            placeholder.Selected = true;
+            listItems.Add(placeholder);
+            PloegenViewModel vm = new PloegenViewModel();
+            List<Ploeg> ploegen = plservice.All();
+            for (int i = 0; i < ploegen.Count; i++)
+            {
+                SelectListItem li = new SelectListItem();
+                li.Selected = false;
+                li.Text = ploegen.ElementAt(i).naam;
+                li.Value = i.ToString();
+                listItems.Add(li);
+            }
+            
+            vm.ploegen = listItems;
+            return View(vm);
         }
-
-        public ActionResult Contact()
+        public ActionResult Stadions()
         {
-            ViewBag.Message = "Your contact page.";
-
+            
             return View();
         }
         [Authorize]

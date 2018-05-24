@@ -1,0 +1,56 @@
+﻿@model VBTicketVerkoop.ViewModels.PloegenViewModel
+
+@{
+    ViewBag.Title = "Ploegen";
+}
+
+<div class="form-group" style="width:max-content;margin-top:20px;">
+    <label for="ddlPloegen">Ploegen</label>
+    @Html.DropDownListFor(m => m.geselecteerdePloeg, Model.ploegen, new { @id = "ddlPloegen" })
+</div>
+<div class="col-sm-12" id="tablecol">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+               
+                <th colspan="4" scope="col">Wedstrijdgegevens</th>
+
+            </tr>
+        </thead>
+        <tbody class="move-forward" id="myTable"></tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+    var ddlPloegen = $("#ddlPloegen");
+    ddlPloegen.change(function () {
+        var value = this.value;
+        console.log("value:"+value);
+        $.ajax({
+            url: '@Url.Action("ListTickets","Home")',
+            dataType: "json",
+            type: "POST",
+            cache: false,
+            data: {selectedIndex: value },
+            success: function (data) {
+                if (data.success) {
+                    var tableBody = $("#myTable");
+                    $("#btnSubmit").attr("style", "visibility:visible;");
+                    var index;
+                    var htmlstring = "";
+                    for (index = 0; index < data.thuisploegen.length; index++)
+                    {
+                        htmlstring += "<tr><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.datums[index] + "</a></td><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.thuisploegen[index] + "</a></td><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.uitploegen[index] + "</a></td><td><a href='Wedstrijd/" + data.wedstrijdIDS[index] + "'>" + data.stadions[index] + "</a></td></tr>";
+                    }               
+                    tableBody.html(htmlstring);
+                }
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+
+    });
+
+</script>

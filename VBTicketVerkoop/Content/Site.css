@@ -53,3 +53,12 @@
     font-size: 3rem;
     margin-right: 10px;
 }
+p{
+    margin-top:25px;
+    text-align:justify;
+    max-width:600px;
+
+}
+img{
+    max-width:600px;
+}
